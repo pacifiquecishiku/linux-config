@@ -37,6 +37,12 @@ DEFAULT_COLOR="\e[0m"
 LAST_LTS_JAVA_VERSION="21.0.2-open"
 
 #================DECLARATION DES FONCTIONS=============
+print_installation_of(){
+  echo -e "${CYAN}Installation de $1...\n${DEFAULT_COLOR}"
+  sleep 1
+  cd
+}
+
 upgrade(){
   echo -e "${CYAN}Actualisation des packages...\n${DEFAULT_COLOR}"
   sleep 1
@@ -45,8 +51,8 @@ upgrade(){
 }
 
 install_git () {
-  echo -e "${CYAN}Installation de git...\n${DEFAULT_COLOR}"
-  sleep 1
+  print_installation_of "git"
+
   if ! command -v "git" >/dev/null 2>&1; then
       sudo apt install git
   else
@@ -55,55 +61,53 @@ install_git () {
 }
 
 install_oh_my_zsh () {
-    echo -e "${CYAN}Installation de oh-my-zsh...\n${DEFAULT_COLOR}"
-    sleep 1
-    if ! command -v "zsh" >/dev/null 2>&1; then
-        sudo apt install zsh
-        sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-    else
-        echo -e "${YELLOW}oh-my-zsh est déjà installé vers : $(command -v "zsh") \n${DEFAULT_COLOR}"
+  print_installation_of "oh-my-zsh"
+
+  if ! command -v "zsh" >/dev/null 2>&1; then
+      sudo apt install zsh
+      sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+  else
+      echo -e "${YELLOW}oh-my-zsh est déjà installé vers : $(command -v "zsh") \n${DEFAULT_COLOR}"
     fi
 }
 
 install_sdkman () {
-    echo -e "${CYAN}Installation de SDKMAN...\n${DEFAULT_COLOR}"
-    sleep 1
-    cd
-    chemin_fichier=$(find .sdkman/ -type f -name "sdkman-main.sh" 2>/dev/null)
-    if [ -z "$chemin_fichier" ]; then
-        curl -s "https://get.sdkman.io" | bash
-        sudo chmod +x .sdkman/bin/sdkman-init.sh
-        ./.sdkman/bin/sdkman-init.sh
-        # Installation et configuration de Java
-        gnome-terminal -- bash -c "echo -e '${CYAN}Installation et configuration de Java ${LAST_LTS_JAVA_VERSION}...\n${DEFAULT_COLOR}'; source $HOME/.sdkman/bin/sdkman-init.sh && sdk install java ${LAST_LTS_JAVA_VERSION}"
-    else
-        echo -e "${YELLOW}SDKMAN est déjà installé vers : $chemin_fichier \n${DEFAULT_COLOR}"
-    fi
+  print_installation_of "sdkman"
+
+  chemin_fichier=$(find .sdkman/ -type f -name "sdkman-main.sh" 2>/dev/null)
+  if [ -z "$chemin_fichier" ]; then
+      curl -s "https://get.sdkman.io" | bash
+      sudo chmod +x .sdkman/bin/sdkman-init.sh
+      ./.sdkman/bin/sdkman-init.sh
+      # Installation et configuration de Java
+      gnome-terminal -- bash -c "echo -e '${CYAN}Installation et configuration de Java ${LAST_LTS_JAVA_VERSION}...\n${DEFAULT_COLOR}'; source $HOME/.sdkman/bin/sdkman-init.sh && sdk install java ${LAST_LTS_JAVA_VERSION}"
+  else
+      echo -e "${YELLOW}SDKMAN est déjà installé vers : $chemin_fichier \n${DEFAULT_COLOR}"
+  fi
 }
 
 install_jetbrains_toolbox () {
-    echo -e "${CYAN}Installation de Jetbrains Toolbox...\n${DEFAULT_COLOR}"
-    sleep 1
-    cd
-    chemin_fichier=$(find .local/share/JetBrains/ -type f -name "jetbrains-toolbox" 2>/dev/null)
-    if [ -z "$chemin_fichier" ]; then
-        #Installation des dependencies
-        sudo apt install libfuse2
-        sudo apt install jq
+  print_installation_of "jetbrains-toolbox"
 
-        # Récupérer l'URL de la dernière version de Toolbox
-        url=$(echo $(curl -s https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release) | jq -r '.TBA[0].downloads.linux.link')
-        wget "$url"
-        filename=$(basename "$url")
-        tar -xzf "$filename" && rm "$filename" && cd $(basename "$filename" .tar.gz) && ./jetbrains-toolbox
-    else
-        echo -e "${YELLOW}Jetbrains Toolbox est déjà installé vers : $chemin_fichier \n${DEFAULT_COLOR}"
-    fi
+  chemin_fichier=$(find .local/share/JetBrains/ -type f -name "jetbrains-toolbox" 2>/dev/null)
+  if [ -z "$chemin_fichier" ]; then
+      #Installation des dependencies
+      sudo apt install libfuse2
+      sudo apt install jq
+
+      # Récupérer l'URL de la dernière version de Toolbox
+      url=$(echo $(curl -s https://data.services.jetbrains.com/products/releases?code=TBA&latest=true&type=release) | jq -r '.TBA[0].downloads.linux.link')
+      wget "$url"
+      filename=$(basename "$url")
+      tar -xzf "$filename" && rm "$filename" && cd $(basename "$filename" .tar.gz) && ./jetbrains-toolbox
+  else
+      echo -e "${YELLOW}Jetbrains Toolbox est déjà installé vers : $chemin_fichier \n${DEFAULT_COLOR}"
+  fi
 }
 
 install_spotify(){
-  echo -e "${CYAN}Installation de Spotify...\n${DEFAULT_COLOR}"
-  sleep 1
+  print_installation_of "spotify"
+
   if ! command -v "spotify" >/dev/null 2>&1; then
       curl -sS https://download.spotify.com/debian/pubkey_C85668DF69375001.gpg | sudo gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/spotify.gpg
       echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
@@ -111,7 +115,6 @@ install_spotify(){
   else
       echo -e "${YELLOW}Spotify est déjà installé vers : $(command -v "spotify") \n${DEFAULT_COLOR}"
   fi
-
 }
 
 create_workspace(){
@@ -122,9 +125,8 @@ create_workspace(){
 }
 
 install_postman(){
-  echo -e "${CYAN}Installation de Postman...\n${DEFAULT_COLOR}"
-  sleep 1
-  cd
+  print_installation_of "postman"
+
   if ! command -v "postman" >/dev/null 2>&1; then
       wget "https://dl.pstmn.io/download/latest/linux_64?deviceId=52025c10-7deb-444d-82fa-83f6424f34bb" -O postman-linux-x64.tar.gz
       sudo tar -xzf postman-linux-x64.tar.gz -C /opt && rm postman-linux-x64.tar.gz
@@ -144,11 +146,8 @@ EOF'
       echo -e "${YELLOW}Postman est déjà installé vers : $(command -v "postman") \n${DEFAULT_COLOR}"
   fi
 }
+
 #================EXECUTION=============
-
-# Positionnement au dossier initial du SO
-cd
-
 upgrade
 install_git
 install_oh_my_zsh
