@@ -147,14 +147,38 @@ EOF'
   fi
 }
 
+install_snapd(){
+  print_installation_of "snapd"
+
+  if ! command -v "snap" >/dev/null 2>&1; then
+      sudo mv /etc/apt/preferences.d/nosnap.pref nosnap.pref.backup
+      sudo apt update
+      sudo apt install snapd
+  else
+      echo -e "${YELLOW}snapd est déjà installé vers : $(command -v "snap") \n${DEFAULT_COLOR}"
+  fi
+}
+
+install_flutter(){
+  print_installation_of "flutter"
+
+  if ! command -v "flutter" >/dev/null 2>&1; then
+      sudo snap install flutter --classic
+  else
+      echo -e "${YELLOW}flutter est déjà installé vers : $(command -v "flutter") \n${DEFAULT_COLOR}"
+  fi
+}
+
 #================EXECUTION=============
-upgrade
+#upgrade
 install_git
+install_snapd
 install_oh_my_zsh
 install_sdkman
 install_jetbrains_toolbox
 install_postman
 install_spotify
+install_flutter
 create_workspace
 
 echo -e "${GREEN}Ton Linux à bien été configuré et est prêt à être utilisé${DEFAULT_COLOR}"
