@@ -21,6 +21,8 @@ En gros, ce script permet d'installer certains outils avec leurs dependence et v
     * Pour choisir une version différente, il suffit de modifier la variable LAST_LTS_JAVA_VERSION en utilisant une des
       versions supportée par sdkMan (https://sdkman.io/jdks)
 * Postman
+* Flutter
+* Snap
 
 Au cas où il y aurait des outils que tu n'aimerais pas installer, il suffit de commenté la ligne qui execute la
 fonction d'installation de l'outil. Pas besoin de commenter toute la fonction
