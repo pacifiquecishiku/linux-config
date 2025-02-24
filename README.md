@@ -23,6 +23,7 @@ En gros, ce script permet d'installer certains outils avec leurs dependence et v
 * Postman
 * Flutter
 * Snap
+* pgAdmin4
 
 Au cas où il y aurait des outils que tu n'aimerais pas installer, il suffit de commenté la ligne qui execute la
 fonction d'installation de l'outil. Pas besoin de commenter toute la fonction

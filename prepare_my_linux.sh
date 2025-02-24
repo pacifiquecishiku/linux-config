@@ -140,6 +140,16 @@ install_flutter(){
   fi
 }
 
+install_pgAdmin4(){
+  print_installation_of "pgAdmin4"
+
+  if ! command -v "pgAdmin4" >/dev/null 2>&1; then
+      sudo snap install pgadmin4
+  else
+      echo -e "${YELLOW}pgAdmin4 est déjà installé vers : $(command -v "pgAdmin4") \n${DEFAULT_COLOR}"
+  fi
+}
+
 #================EXECUTION=============
 upgrade
 install_git
@@ -150,6 +160,7 @@ install_jetbrains_toolbox
 install_postman
 install_spotify
 install_flutter
+install_pgAdmin4
 create_workspace
 
 echo -e "${GREEN}Ton Linux à bien été configuré et est prêt à être utilisé${DEFAULT_COLOR}"
